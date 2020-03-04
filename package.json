@@ -1,0 +1,31 @@
+{
+  "name": "rich",
+  "version": "1.0.0",
+  "description": "使用node搭建丰富的本地服务",
+  "main": "app.js",
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-cors": "0.0.16",
+    "koa-router": "^8.0.8",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
+    "mime": "^2.4.4",
+    "mz": "^2.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llorz-o/rich.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/llorz-o/rich/issues"
+  },
+  "homepage": "https://github.com/llorz-o/rich#readme"
+}
