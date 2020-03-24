@@ -1,0 +1,30 @@
+{
+  "name": "rich",
+  "version": "1.0.0",
+  "description": "koa 后台",
+  "main": "./dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llorz-o/rich.git"
+  },
+  "keywords": [
+    "rich"
+  ],
+  "author": "joj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/llorz-o/rich/issues"
+  },
+  "homepage": "https://github.com/llorz-o/rich#readme",
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-router": "^8.0.8"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.2",
+    "@types/koa-router": "^7.4.0"
+  }
+}
