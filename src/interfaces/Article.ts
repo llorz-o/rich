@@ -1,22 +1,3 @@
-export interface IChildMessage {
-  avatar?: string
-  date?: Date
-  nick?: string
-  state?: number
-  to?: string
-  content?: string
-}
-
-export interface IMessage {
-  avatar?: string
-  nick?: string
-  content?: string
-  date?: Date
-  state?: number
-  isMaster?: boolean
-  children?: IChildMessage[]
-}
-
 export interface IArticle {
   title?: string // 文章标题
   auth?: string // 文章作者
@@ -29,5 +10,7 @@ export interface IArticle {
   content?: string
   tags?: string[]
   categorys?: string[]
-  messageList?: IMessage[]
+  messageList?: string[]
+  state: number
+  cover?: string
 }

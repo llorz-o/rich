@@ -9,8 +9,9 @@ class Logs {
   private logsQueue: string[] = []
   private bufQueue: string[] = []
   private timer
-  private logFileWriteStream
-  private logFileIsClose: boolean = true
+  private logFilePath
+  private logFileIsPresence = false
+
   public ErrorType
   constructor() {
     this.ErrorType = ERROR_TYPE
@@ -49,39 +50,47 @@ class Logs {
       this.writeLogs()
     }, 1000)
   }
+  // 文件是否存在
+  private judgeFileIsPresence() {
+    let file_path = this.getFileName()
+    fs.access(file_path, fs.constants.F_OK | fs.constants.W_OK, (err) => {
+      if (err) {
+        this.logFileIsPresence = false
+        // 文件不存在
+        // if (err.code === 'ENOENT') {
+        //   this.logFileIsPresence = false
+        // }
+        // 文件不可写
+        return console.error(`目标文件:[${file_path}]不可写`)
+      }
+      this.logFileIsPresence = true
+    })
+  }
+  // 获取文件名
+  private getFileName() {
+    if (this.logFilePath === undefined) {
+      let today = getYmd().split(':').join('-')
+      this.logFilePath = path.join(fig.root, '/logs', `/${today}.log`)
+    }
+    return this.logFilePath
+  }
   // 写入判断
   private writeLogs() {
     this.logsQueue = this.bufQueue
     this.bufQueue = []
 
-    let today = getYmd()
-        .split(':')
-        .join('-'),
-      file_path = path.join(fig.root, '/logs', `/${today}.log`),
+    let file_path = this.getFileName(),
       file_content = ''
 
-    this.logsQueue.forEach(l => (file_content += l + '\r\n'))
+    this.logsQueue.forEach((l) => (file_content += l + '\r\n'))
 
-    fs.access(file_path, fs.constants.F_OK | fs.constants.W_OK, err => {
-      if (err) {
-        // 文件不存在
-        if (err.code === 'ENOENT') return this.initStream(file_path, file_content)
-        // 文件不可写
-        return console.error(`目标文件:[${file_path}]写入失败`)
-      }
-      if (!this.logFileWriteStream || this.logFileIsClose) this.initStream(file_path, file_content)
-    })
+    this.writeLogFile(file_path, file_content)
   }
-  // 使用 writeStream 流写入
-  private initStream(_file_path, _file_content) {
-    this.logFileWriteStream = fs.createReadStream(_file_path, {
-      flags: 'r+'
-    })
-    this.logFileWriteStream.open = () => (this.logFileIsClose = false)
-    this.logFileWriteStream.close = () => (this.logFileIsClose = true)
-    this.logFileWriteStream.ready = () => (this.logFileIsClose = false)
-    fs.writeFile(_file_path, _file_content, { flag: 'a' }, err => {
-      if (err) console.error(`目标文件:[${_file_path}]写入失败`)
+
+  private writeLogFile(_file_path, _file_content) {
+    fs.writeFile(_file_path, _file_content, { flag: 'a' }, (err) => {
+      if (err) return console.error(`目标文件:[${_file_path}]写入失败`)
+      this.logFileIsPresence = true
     })
   }
 }

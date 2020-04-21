@@ -1,3 +1,5 @@
+import { moment } from '../lib/export'
+
 export const getTime = (separate?: string): string | (string | number)[] => {
   let { year, month, day, hours, millisecond, second } = createTime()
   if (<string>separate) {
@@ -19,10 +21,7 @@ export const getHms = (): string => {
 export const createTime = (_time?: Date, _zero = false) => {
   let time = localTime(_time)
 
-  let [hours, millisecond, second] = time
-    .toTimeString()
-    .slice(0, 8)
-    .split(':')
+  let [hours, millisecond, second] = time.toTimeString().slice(0, 8).split(':')
 
   let year = time.getFullYear(),
     month = time.getMonth() + 1,
@@ -43,26 +42,26 @@ export const createTime = (_time?: Date, _zero = false) => {
     day,
     hours,
     millisecond,
-    second
+    second,
   }
 }
 
-export const appendZero = t => (Number(t) < 10 ? `0${t}` : t)
+export const appendZero = (t) => (Number(t) < 10 ? `0${t}` : t)
 
 // 时间戳转时间
-export const formatDuration = ms => {
+export const formatDuration = (ms) => {
   if (ms < 0) ms = -ms
   return {
     day: Math.floor(ms / 86400000),
     hour: Math.floor(ms / 3600000) % 24,
     minute: Math.floor(ms / 60000) % 60,
     second: Math.floor(ms / 1000) % 60,
-    millisecond: Math.floor(ms) % 1000
+    millisecond: Math.floor(ms) % 1000,
   }
 }
 
 export const localTime = (time?: string | Date) => {
-  let date = new Date(time)
+  let date = new Date(moment(time).format())
   date = date.toString() === 'Invalid Date' ? new Date() : date
   let ymd = date.toLocaleDateString()
   let hms = date.toLocaleTimeString()

@@ -8,7 +8,6 @@ import Distribution from './middleware/distribution'
 import Units from './tests'
 import fig from './config'
 import db from './bootstrap/mongo'
-import reload from './bootstrap/reload'
 
 db.once('open', () => {
   console.log('mongo is open')
@@ -19,28 +18,26 @@ db.once('open', () => {
 
   koa.use(
     KoaStatic(path.join(fig.root, STATIC_PATH), {
-      maxage: 86400000
+      maxage: 86400000,
     })
   )
   koa.use(
     Koa2Cors({
-      origin: ctx => {
+      origin: (ctx) => {
         return '*'
       },
       exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
       maxAge: 5,
       credentials: true,
       allowMethods: ['GET', 'POST', 'DELETE'],
-      allowHeaders: ['Content-Type', 'Authorization', 'Accept']
+      allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
     })
   )
   koa.use(KoaBody())
   koa.use(KoaJson())
   koa.use(Distribution())
-  koa.use(async ctx => {})
+  koa.use(async (ctx) => {})
   koa.listen(3100)
-
-  reload.loadCountModel()
 
   Units(['utils', 'logs', 'mongo'])
 })

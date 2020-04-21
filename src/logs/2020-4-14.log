@@ -1,0 +1,2 @@
+[TypeError]: 2020:4:14 19:48:36 // 当前文件:[archives.ts]不是一个路由文件
+[DaoError]: 2020:4:14 23:19:33 // sendArticleDao 查询文章详情 _id:[5e7c485b13f4021b98a50e4a] 失败 err:[{"message":"Schema hasn't been registered for model \"messages\".\nUse mongoose.model(name, schema)","name":"MissingSchemaError"}]
