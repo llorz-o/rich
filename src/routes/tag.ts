@@ -1,12 +1,12 @@
-import { findArticleByTagDao } from '../dao/article.dao'
-import { createTag, findTags } from '../dao/tags.dao'
-import { validate } from '../lib/validator'
+import { findArticleByTagDao, findTagsDao } from '../dao/article.dao'
+import { createTag } from '../dao/tags.dao'
+import { validate, vli } from '../lib/validator'
 import { formatRes } from '../lib/response'
 
 const findArticleListByTag = async (ctx) => {
   let tagName = ctx.params.tagName
-  let tagsArticleList = await findArticleByTagDao(tagName)
-  ctx.body = tagsArticleList
+  let vr = vli([['isString', tagName]])
+  ctx.body = vr.ok ? formatRes(await findArticleByTagDao(tagName), '查询失败') : vr
 }
 
 const addTag = async (ctx) => {
@@ -19,7 +19,7 @@ const addTag = async (ctx) => {
 }
 
 const getTags = async (ctx) => {
-  let result = await findTags()
+  let result = await findTagsDao()
   ctx.body = formatRes(result, `获取所有标签`)
 }
 

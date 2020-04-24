@@ -3,15 +3,40 @@ import logs from '../lib/logs'
 import { vli } from '../lib/validator'
 
 let test = async (ctx) => {
-  // {
-  //   isNumber: 12,
-  //   isString: (fn) => fn('12'),
-  //   isNumber: (fn) => [1, '2'].every((v) => fn(v)),
-  // }
-  ctx.body = vli([
-    ['isNumber', (fn) => fn('af')],
-    ['isMid', '12121'],
-  ])
+  // let articleAggregates = Article.aggregate([]).project('-messageList -content')
+  // let untagsList = await articleAggregates.match({
+  //   tags: {
+  //     $size: 0,
+  //   },
+  // })
+  // let tagsList = await Article.aggregate([])
+  //   .project('-messageList -content')
+  //   .unwind('tags')
+  //   .group({
+  //     _id: '$tags',
+  //     tagsList: {
+  //       $push: {
+  //         _id: '$_id',
+  //         title: '$title',
+  //         desc: '$desc',
+  //         likeCount: '$likeCount',
+  //         messageCount: '$messageCount',
+  //         viewCount: '$viewCount',
+  //         state: '$state',
+  //         auth: '$auth',
+  //         categorys: '$categorys',
+  //         date: '$date',
+  //         cover: '$cover',
+  //       },
+  //     },
+  //   })
+  ctx.body = await Article.aggregate([]).project({
+    messageList: 0,
+    content: 0,
+    test:{
+      
+    }
+  })
 }
 
 let queryArticle = async (ctx) => {

@@ -1,3 +1,6 @@
+import validate = require('validate.js')
+import { writeUploads } from '../lib/upload'
+
 const crypto = require('crypto-js')
 const QQ_NUMBER_REG = /([0-9]+)@qq/i
 
@@ -31,6 +34,22 @@ const getAvatar = async (ctx) => {
   }
 }
 
+const upload = async (ctx) => {
+  let files = ctx.request.files
+  if (files && files.file) {
+    if (validate.isArray(files.file)) ctx.body = await writeUploads(files.file)
+    else ctx.body = await writeUploads([files.file])
+  } else {
+    ctx.response.status = 300
+    ctx.body = {
+      ok: false,
+      message: '无法接收文件,请确认api',
+    }
+  }
+}
+
 export default {
   'GET /avatar': getAvatar,
+
+  'POST /admin/upload': upload,
 }

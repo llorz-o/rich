@@ -50,20 +50,11 @@ const postArticleComment = async (ctx) => {
     data,
   }
 }
-// 给文章添加分类
+// 添加文章
 const postAddArticle = async (ctx) => {
   let article = ctx.request.body
-  let result = await addNewArticle(article)
-  if (result) {
-    ctx.body = {
-      ok: true,
-    }
-  } else {
-    ctx.body = {
-      ok: false,
-      message: '文章添加失败',
-    }
-  }
+  let vr = vli([['isObject', article]])
+  ctx.body = vr.ok ? formatRes(await addNewArticle(article), '文章添加失败') : vr
 }
 // 删除文章中的分类
 const deleteArticleCategories = async (ctx) => {
@@ -77,12 +68,11 @@ const deleteArticleCategories = async (ctx) => {
 // 获取文章列表
 const getArticleList = async (ctx) => {
   let { skip, limit } = ctx.params
-  console.log(ctx.request.query)
   skip = Number(skip)
   limit = Number(limit)
   let data
   if (validate.isNumber(skip) && validate.isNumber(limit)) {
-    data = await findArticleList(skip, limit, ctx.request.query)
+    data = await findArticleList(skip, limit, ctx.request.query || {})
   }
   ctx.body = formatRes(data, '文章列表获取失败')
 }
@@ -119,11 +109,7 @@ const deleteArticleById = async (ctx) => {
     ['isArray', articleIds],
     ['isMid', (fn) => articleIds.every((id) => fn(id))],
   ])
-  if (vr.ok) {
-    ctx.body = formatRes(await deleteArticleByIdDao(articleIds), '删除文章失败')
-  } else {
-    ctx.body = vr
-  }
+  ctx.body = vr.ok ? formatRes(await deleteArticleByIdDao(articleIds), '删除文章失败') : vr
 }
 
 export default {

@@ -19,7 +19,6 @@ export const MessageSchema: Schema = new Schema({
   },
   url: {
     type: String,
-    required: true,
   },
   state: {
     type: Number,

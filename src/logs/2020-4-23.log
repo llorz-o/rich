@@ -1,0 +1,28 @@
+[DaoError]: 2020:4:23 13:51:46 // addArticleToCategories 添加文章至分类 cateId:[测试] id:[5ea12cf2b76ab45baca27f98] err:[{"stringValue":"\"测试\"","kind":"ObjectId","value":"测试","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 13:52:55 // addArticleToCategories 添加文章至分类 cateId:[新分类] id:[5ea12d37b76ab45baca27f99] err:[{"stringValue":"\"新分类\"","kind":"ObjectId","value":"新分类","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"新分类\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 13:59:32 // addArticleToCategories 添加文章至分类 cateId:[测试分类添加] id:[5ea12ec4ec87794730a0799a] err:[{"stringValue":"\"测试分类添加\"","kind":"ObjectId","value":"测试分类添加","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试分类添加\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 14:06:11 // addArticleToCategories 添加文章至分类 cateId:[测试分类添加] id:[5ea130535be9925430977a42] err:[{"stringValue":"\"测试分类添加\"","kind":"ObjectId","value":"测试分类添加","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试分类添加\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 14:06:13 // addArticleToCategories 添加文章至分类 cateId:[测试分类添加] id:[5ea130555be9925430977a43] err:[{"stringValue":"\"测试分类添加\"","kind":"ObjectId","value":"测试分类添加","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试分类添加\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 14:21:38 // addArticleToCategories 添加文章至分类 cateId:[新分类] id:[5ea133f2edbef4106481bfcf] err:[{"stringValue":"\"新分类\"","kind":"ObjectId","value":"新分类","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"新分类\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 16:13:39 // addArticleToCategories 添加文章至分类 cateId:[文档] id:[5ea14e330586471c20e84549] err:[{"stringValue":"\"文档\"","kind":"ObjectId","value":"文档","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"文档\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 16:26:25 // addArticleToCategories 添加文章至分类 cateId:[测试] id:[5ea151310586471c20e8454b] err:[{"stringValue":"\"测试\"","kind":"ObjectId","value":"测试","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:23 18:44:01 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:46:30 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:46:44 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:48:42 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:48:59 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:49:18 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:49:21 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:49:27 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:49:28 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:50:45 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:51:36 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:51:37 // findArticleList 计数查询失败
+[DaoError]: 2020:4:23 18:51:45 // findArticleList 计数查询失败
+[SystemError]: 2020:4:23 22:24:24 // fileDirPath:[D:\RICH\rich\src\static\texts] err:[{"errno":-4058,"code":"ENOENT","syscall":"stat","path":"D:\\RICH\\rich\\src\\static\\texts"}]
+[SystemError]: 2020:4:23 22:24:24 // fileDirPath:[D:\RICH\rich\src\static\applications] err:[{"errno":-4058,"code":"ENOENT","syscall":"stat","path":"D:\\RICH\\rich\\src\\static\\applications"}]
+[SystemError]: 2020:4:23 22:26:01 // fileDirPath:[D:\RICH\rich\src\static\texts] err:[{"errno":-4058,"code":"ENOENT","syscall":"stat","path":"D:\\RICH\\rich\\src\\static\\texts"}]
+[SystemError]: 2020:4:23 22:26:01 // fileDirPath:[D:\RICH\rich\src\static\applications] err:[{"errno":-4058,"code":"ENOENT","syscall":"stat","path":"D:\\RICH\\rich\\src\\static\\applications"}]
+[TypeError]: 2020:4:23 23:07:08 // 当前文件:[uploads.ts]不是一个路由文件
+[DaoError]: 2020:4:23 23:41:02 // addArticleToCategories 添加文章至分类 cateId:[测试] id:[5ea1b70e0d4ade11203884d0] err:[{"stringValue":"\"测试\"","kind":"ObjectId","value":"测试","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试\" at path \"_id\" for model \"categories\"","name":"CastError"}]
+[DaoError]: 2020:4:24 00:00:27 // addArticleToCategories 添加文章至分类 cateId:[测试] id:[5ea1bb9b0d4ade11203884d2] err:[{"stringValue":"\"测试\"","kind":"ObjectId","value":"测试","path":"_id","reason":{},"message":"Cast to ObjectId failed for value \"测试\" at path \"_id\" for model \"categories\"","name":"CastError"}]

@@ -1,5 +1,4 @@
-import { sortArticleDao } from '../dao/article.dao'
-import { findTags } from '../dao/tags.dao'
+import { sortArticleDao, findTagsDao } from '../dao/article.dao'
 import { findNewsCommentsDao } from '../dao/comment.dao'
 import { findNewMessages } from '../dao/message.dao'
 const Home = async (ctx) => {
@@ -10,7 +9,7 @@ const Home = async (ctx) => {
 
 const Init = async (ctx) => {
   //   查询首页需要显示的 tags 标签以及数量
-  let tags = await findTags()
+  let tags = await findTagsDao()
   let newsMessage = await findNewMessages(10)
 
   ctx.body = {

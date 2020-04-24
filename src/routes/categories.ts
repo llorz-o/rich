@@ -33,5 +33,5 @@ const postAddCategories = async (ctx) => {
 
 export default {
   'GET /categories': getCategories,
-  'POST /addCategories': postAddCategories,
+  'POST /admin/addCategories': postAddCategories,
 }

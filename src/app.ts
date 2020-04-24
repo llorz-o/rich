@@ -33,7 +33,14 @@ db.once('open', () => {
       allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
     })
   )
-  koa.use(KoaBody())
+  koa.use(
+    KoaBody({
+      multipart: true,
+      formidable: {
+        maxFileSize: 200 * 1024 * 1024, // 设置上传文件大小最大限制，默认2M
+      },
+    })
+  )
   koa.use(KoaJson())
   koa.use(Distribution())
   koa.use(async (ctx) => {})

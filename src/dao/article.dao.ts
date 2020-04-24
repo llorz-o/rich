@@ -7,16 +7,16 @@ import { IArticle } from '../interfaces/Article'
 import { addArticleToCategories } from './categories.dao'
 import { moment } from '../lib/export'
 // 查询排序文章,允许提供排序关键字与长度限制
-export const sortArticleDao = ({ sortKey = 'date', sort = -1, limit = 10 } = {}) =>
+export const sortArticleDao = ({ sortKey = '-date', limit = 10 } = {}) =>
   new Promise((resolve) =>
-    Article.find()
-      .sort({
-        [sortKey]: sort,
-      })
+    Article.find({
+      state: 1,
+    })
+      .sort('-date')
       .limit(limit)
       .exec((err, data) => {
         if (err) {
-          logs.daoErr(`sortArticleDao sortKey:[${sortKey}] sort:[${sort}] limit:[${limit}]`)
+          logs.daoErr(`sortArticleDao sortKey:[${sortKey}] limit:[${limit}]`)
           return resolve([])
         }
         resolve(data)
@@ -124,29 +124,56 @@ export const sendCommentDao = (message: IComment, to: string) =>
   )
 
 // 通过标签查询文章列表
-export const findArticleByTagDao = (tagName?: string) =>
-  new Promise((resolve) => {
-    Tags.findOne({ tagName })
-      .populate({
-        path: 'tagList',
-        select: '-content -messageList -lastChangeDate',
-        options: {
-          sort: '-date',
+export const findArticleByTagDao = async (tagName?: string) => {
+  let untagsList = []
+  if (tagName === undefined) {
+    untagsList = await Article.aggregate([])
+      .project('-messageList -content')
+      .match({
+        tags: {
+          $size: 0,
         },
       })
-      .exec((err, data) => {
-        if (err) {
-          logs.daoErr(`findArticleByTagDao 通过标签查询文章列表失败 tagName:[${tagName || '?'}] 标签查询文章失败`)
-          return resolve([])
-        }
-        resolve(data)
-      })
-  })
+  }
+  let tagArticleList = []
+  tagArticleList = await Article.aggregate([])
+    .project('-messageList -content')
+    .unwind('tags')
+    .match({
+      tags: {
+        $in: [tagName],
+      },
+    })
+    .group({
+      _id: '$tags',
+      article: {
+        $push: {
+          _id: '$_id',
+          title: '$title',
+          desc: '$desc',
+          likeCount: '$likeCount',
+          messageCount: '$messageCount',
+          viewCount: '$viewCount',
+          state: '$state',
+          auth: '$auth',
+          categorys: '$categorys',
+          date: '$date',
+          style: '$style',
+          coverTheme: '$coverTheme',
+        },
+      },
+    })
+    .unwind('article')
+
+  return { untagsList, tagArticleList }
+}
 
 // 查询文章归档
 export const findArchives = () =>
   new Promise((resolve) =>
-    Article.find()
+    Article.find({
+      state: 1,
+    })
       .sort('-date')
       .select('date title')
       .exec((err, data) => {
@@ -178,58 +205,71 @@ export interface filterArticleListQuery {
   end_date?: string | Date
   categories?: string
   tag?: string
+  state?: number | string
 }
 // 文章列表
 export const findArticleList = (
   skip: number = 0,
   limit: number = 10,
-  { title, start_date = new Date(0), end_date = new Date(2100, 0, 1), categories, tag }: filterArticleListQuery = {}
+  { title, start_date = new Date(0), end_date = new Date(2100, 0, 1), categories, tag, state }: filterArticleListQuery = {}
 ) =>
   new Promise((resolve) => {
-    let categorys_match = {}
-    if (categories)
-      categorys_match = {
-        name: categories,
-      }
-
-    let ArticleList = Article.find()
-      .populate('tagList')
-      .populate({
-        path: 'categorys',
-        select: 'name _id',
-        match: categorys_match,
-      })
-      .select('-content -messageList')
-      .skip(skip)
-      .limit(limit)
+    let ArticleList = Article.aggregate([]).project('-messageList -content')
 
     if (start_date || end_date) {
       start_date = moment(start_date).startOf('day').format()
       end_date = moment(end_date).endOf('day').format()
-      console.log(start_date, end_date)
-      ArticleList = ArticleList.where('date').gte(start_date).lte(end_date)
-    }
-    if (title) {
-      ArticleList = ArticleList.where('title').regex(new RegExp(title, 'i'))
-    }
-    if (tag) {
-      ArticleList = ArticleList.find({
-        tags: tag,
+      // tag
+      // 使用 where("date").gte(start_date).lt("end_date") 时没有问题
+      // 但是如果是聚合查询 match 时需要使用 new Date() 才能准确的查询出结果
+      ArticleList = ArticleList.match({
+        date: {
+          $gte: new Date(start_date),
+          $lt: new Date(end_date),
+        },
       })
     }
+    if (title) {
+      ArticleList = ArticleList.match({
+        title: {
+          $reg: new RegExp(title, 'i'),
+        },
+      })
+    }
+    if (tag) {
+      ArticleList = ArticleList.match({
+        tags: {
+          $in: [tag],
+        },
+      })
+    }
+    if (categories) {
+      ArticleList = ArticleList.match({
+        categorys: {
+          $in: [categories],
+        },
+      })
+    }
+    if (state !== '') {
+      ArticleList = ArticleList.match({
+        state: {
+          $in: [Number(state)],
+        },
+      })
+    }
+    ArticleList = ArticleList.skip(skip).limit(limit)
     ArticleList.exec((err, articleList) => {
       if (err) {
         logs.daoErr(`findArticleList 查询文章列表失败 skip:[${skip}] limit:[${limit}] err:[${JSON.stringify(err)}]`)
         return resolve()
       }
-      ArticleList.count((err, count) => {
-        if (err) {
-          return resolve({
-            articleList,
-            count: 0,
-          })
+      ArticleList.count('articleCount').exec((err, counts) => {
+        if (err || !counts[0]) {
+          logs.daoErr(`findArticleList 计数查询失败`)
+          resolve({ articleList, count: 0 })
+          return
         }
-        resolve({ articleList, count })
+        resolve({ articleList, count: counts[0].articleCount })
       })
     })
   })
@@ -238,10 +278,7 @@ export const findArticleList = (
 export const findTagsDao = (findArticleList: boolean = false) =>
   new Promise((resolve) => {
     let group: any = {
-      _id: '$tags_doc._id',
-      tagName: {
-        $addToSet: '$tags_doc.tagName',
-      },
+      _id: '$tags',
       count: {
         $sum: 1,
       },
@@ -259,25 +296,12 @@ export const findTagsDao = (findArticleList: boolean = false) =>
           auth: '$auth',
           categorys: '$categorys',
           date: '$date',
-          cover: '$cover',
+          style: '$style',
+          coverTheme: '$coverTheme',
         },
       }
     }
-    resolve(
-      Article.aggregate([
-        {
-          $lookup: {
-            from: 'tags',
-            localField: 'tags',
-            foreignField: 'tagName',
-            as: 'tags_doc',
-          },
-        },
-      ])
-        .unwind('tags_doc')
-        .group(group)
-        .unwind('tagName')
-    )
+    resolve(Article.aggregate([]).unwind('tags').group(group).sort('_id'))
   })
 
 export const updateArticleState = (articleId: string, state: number) =>

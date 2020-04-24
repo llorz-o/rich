@@ -1,3 +1,5 @@
+import { ICategories } from './Categories'
+
 export interface IArticle {
   title?: string // 文章标题
   auth?: string // 文章作者
@@ -9,8 +11,14 @@ export interface IArticle {
   viewCount?: number
   content?: string
   tags?: string[]
-  categorys?: string[]
+  categorys?: string
   messageList?: string[]
   state: number
   cover?: string
+  coverTheme?: string
+  style?: {
+    coverUrl?: string
+    coverSty?: String
+    coverDft?: String
+  }
 }
